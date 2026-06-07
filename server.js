@@ -3,6 +3,9 @@ const cors = require("cors");
 const { exec } = require("child_process");
 const path = require("path");
 
+const { GoogleGenAI } = require("@google/genai");
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+
 const app = express();
 
 app.use(cors());
@@ -15,6 +18,35 @@ app.get("/", (req, res) => {
     res.json({
         message: "Backend Bely Studio ap mache"
     });
+
+});
+
+app.post("/ask-ai", async (req, res) => {
+
+    try {
+
+        const { prompt } = req.body;
+
+        const response = await ai.models.generateContent({
+            model: "gemini-2.5-flash",
+            contents: prompt
+        });
+
+        res.json({
+            success: true,
+            answer: response.text
+        });
+
+    } catch (error) {
+
+        console.error(error);
+
+        res.status(500).json({
+            success: false,
+            message: "Erè Gemini"
+        });
+
+    }
 
 });
 
