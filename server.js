@@ -78,7 +78,7 @@ console.log(
 
     if (error) {
 
-        console.error(error);
+        console.error("ERÈ GEMINI:", error);
 
         return res.status(500).json({
             success: false,
