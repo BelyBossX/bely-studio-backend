@@ -25,6 +25,9 @@ app.post("/ask-ai", async (req, res) => {
 
     try {
 
+        console.log("Prompt resevwa:");
+        console.log(req.body);
+
         const { prompt } = req.body;
 
         const response = await ai.models.generateContent({
@@ -37,16 +40,22 @@ app.post("/ask-ai", async (req, res) => {
             answer: response.text
         });
 
-    } catch (error) {
+    } 
+    
+    catch (error) {
 
-        console.error(error);
+  console.error("ERÈ GEMINI:");
+  console.error(error);
 
-        res.status(500).json({
-    success: false,
-    message: error.message
-});
+  res.status(500).json({
 
-    }
+    success:false,
+
+    message:error.message
+
+  });
+
+}
 
 });
 
