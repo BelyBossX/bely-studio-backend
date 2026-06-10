@@ -30,10 +30,66 @@ app.post("/ask-ai", async (req, res) => {
 
         const { prompt } = req.body;
 
-        const response = await ai.models.generateContent({
-            model: "gemini-2.5-flash",
-            contents: prompt
-        });
+        let response;
+
+let attempts = 3;
+
+while (attempts > 0) {
+
+  try {
+
+    response = await ai.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: `
+Ou se Bely AI, yon asistan entèlijan, pwofesyonèl ak itil.
+
+Règ pou repons yo:
+
+- Toujou reponn nan menm lang itilizatè a itilize.
+- Ekri ak yon ton natirèl ak fasil pou konprann.
+- Separe lide yo an paragraf klè.
+- Kite yon liy vid ant chak paragraf.
+- Itilize tit ak soutit lè sa nesesè.
+- Itilize lis bal (•) oswa nimewo lè sa itil.
+- Evite gwo blòk tèks ki difisil pou li.
+- Bay repons ki byen estriktire sou telefòn ak òdinatè.
+- Lè itilizatè a mande eksplikasyon, bay egzanp konkrè.
+- Lè itilizatè a mande kontni kreyatif, fè l kaptivan ak pwofesyonèl.
+
+Demann itilizatè a:
+
+${prompt}
+`
+    });
+
+    break;
+
+  } catch (error) {
+
+    if (
+      error.message.includes("503") &&
+      attempts > 1
+    ) {
+
+      console.log(
+        `Gemini chaje. Nou pral re-eseye... (${attempts - 1} tantativ ki rete)`
+      );
+
+      await new Promise(resolve =>
+        setTimeout(resolve, 3000)
+      );
+
+    } else {
+
+      throw error;
+
+    }
+
+  }
+
+  attempts--;
+
+}
 
         res.json({
             success: true,
@@ -61,21 +117,35 @@ app.post("/ask-ai", async (req, res) => {
 
 app.post("/generate", (req, res) => {
 
-    const {
-  text,
-  voice
-} = req.body;
+    console.log("BOUTON JENERE A RELE ROUTE /generate");
 
-console.log(
-  "Voice:",
-  voice
+    console.log("=== YON DEMANN RIVE ===");
+
+    console.log("Tout sa frontend voye:");
+    console.log(req.body);
+
+    const {
+      text,
+      voice
+    } = req.body;
+
+    console.log("TEXT:", text);
+    console.log("VOICE:", voice);
+
+    const piperPath = path.join(
+  __dirname,
+  "..",
+  "piper",
+  "piper.exe"
 );
 
-    const piperPath =
-      "C:\\Users\\belyf\\OneDrive\\Desktop\\Bely Studio\\piper\\piper.exe";
-
-    const modelPath =
-      "C:\\Users\\belyf\\OneDrive\\Desktop\\Bely Studio\\piper\\voices\\en_US-lessac-medium.onnx";
+    const modelPath = path.join(
+  __dirname,
+  "..",
+  "piper",
+  "voices",
+  "fr_FR-siwis-medium.onnx"
+);
 
     const outputPath =
       path.join(__dirname, "output", "audio.wav");
