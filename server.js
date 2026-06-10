@@ -93,33 +93,6 @@ Ou se Bely AI.
 
 });
 
-const answer =
-  completion.choices[0].message.content;
-
-        res.json({
-  success: true,
-  answer: answer
-});
-
-    } 
-    
-    catch (error) {
-
-  console.error("ERÈ GEMINI:");
-  console.error(error);
-
-  res.status(500).json({
-
-    success:false,
-
-    message:error.message
-
-  });
-
-}
-
-});
-
 app.post("/generate", (req, res) => {
 
     console.log("BOUTON JENERE A RELE ROUTE /generate");
