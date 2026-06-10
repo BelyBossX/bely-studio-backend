@@ -3,7 +3,11 @@ const cors = require("cors");
 const { exec } = require("child_process");
 const path = require("path");
 
-const { GoogleGenAI } = require("@google/genai");
+const groq = new Groq({
+  apiKey: process.env.GROQ_API_KEY,
+});
+
+const Groq = require("groq-sdk");
 
 const apiKeys = [
 
@@ -61,62 +65,34 @@ for (const key of apiKeys) {
 
     console.log("N ap itilize yon nouvo API key...");
 
-    const ai = new GoogleGenAI({
-      apiKey: key
-    });
+    const completion =
+  await groq.chat.completions.create({
 
-    response = await ai.models.generateContent({
-      model: "gemini-2.0-flash",
-      contents: `
-Ou se Bely AI, yon asistan entèlijan, pwofesyonèl ak itil.
+    model: "llama-3.3-70b-versatile",
 
-Règ pou repons yo:
+    messages: [
 
-- Toujou reponn nan menm lang itilizatè a itilize.
-- Ekri ak yon ton natirèl ak fasil pou konprann.
-- Separe lide yo an paragraf klè.
-- Kite yon liy vid ant chak paragraf.
-- Itilize tit ak soutit lè sa nesesè.
-- Itilize lis bal (•) oswa nimewo lè sa itil.
-- Evite gwo blòk tèks ki difisil pou li.
-- Bay repons ki byen estriktire sou telefòn ak òdinatè.
+      {
+        role: "system",
+        content:
+          "Ou se Bely AI, yon asistan entèlijan ak pwofesyonèl."
+      },
 
-Demann itilizatè a:
+      {
+        role: "user",
+        content: prompt
+      }
 
-${prompt}
-`
-    });
+    ]
 
-    success = true;
-
-    break;
-
-  } catch (error) {
-
-    console.error("API key sa a echwe:", error.message);
-
-    if (!error.message.includes("429")) {
-
-      throw error;
-
-    }
-
-  }
-
-}
-
-if (!success) {
-
-  return res.status(500).json({
-    success: false,
-    message: "Tout API keys yo rive nan limit yo."
   });
 
-}
+const answer =
+  completion.choices[0].message.content;
 
         res.json({
   success: true,
-  answer: response.text
+  answer: answer
 });
 
     } 
