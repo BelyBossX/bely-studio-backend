@@ -37,15 +37,7 @@ app.post("/ask-ai", async (req, res) => {
 
         const { prompt } = req.body;
 
-        let response;
-
-let attempts = 3;
-
-while (attempts > 0) {
-
-  try {
-
-    let response;
+let response;
 let success = false;
 
 for (const key of apiKeys) {
@@ -56,19 +48,6 @@ for (const key of apiKeys) {
 
     const ai = new GoogleGenAI({
       apiKey: key
-    });
-
-    let response;
-let success = false;
-
-for (const apiKey of apiKeys) {
-
-  try {
-
-    console.log("N ap itilize yon nouvo API key...");
-
-    const ai = new GoogleGenAI({
-      apiKey
     });
 
     response = await ai.models.generateContent({
@@ -115,15 +94,15 @@ if (!success) {
 
   return res.status(500).json({
     success: false,
-    message: "Tout API keys yo rive nan limit yo. Eseye ankò pita."
+    message: "Tout API keys yo rive nan limit yo."
   });
 
 }
 
         res.json({
-            success: true,
-            answer: response.text
-        });
+  success: true,
+  answer: response.text
+});
 
     } 
     
