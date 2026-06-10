@@ -28,6 +28,8 @@ app.post("/ask-ai", async (req, res) => {
         console.log("Prompt resevwa:");
         console.log(req.body);
 
+        console.log("BACKEND VERSION: GEMINI 2.0");
+
         const { prompt } = req.body;
 
         let response;
@@ -39,7 +41,7 @@ while (attempts > 0) {
   try {
 
     response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
+      model: "gemini-2.0-flash",
       contents: `
 Ou se Bely AI, yon asistan entèlijan, pwofesyonèl ak itil.
 
