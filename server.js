@@ -4,7 +4,6 @@ const { exec } = require("child_process");
 const path = require("path");
 
 const { GoogleGenAI } = require("@google/genai");
-const { GoogleGenAI } = require("@google/genai");
 
 const apiKeys = [
   process.env.GEMINI_API_KEY_1,
@@ -59,10 +58,23 @@ for (const key of apiKeys) {
       apiKey: key
     });
 
+    let response;
+let success = false;
+
+for (const apiKey of apiKeys) {
+
+  try {
+
+    console.log("N ap itilize yon nouvo API key...");
+
+    const ai = new GoogleGenAI({
+      apiKey
+    });
+
     response = await ai.models.generateContent({
       model: "gemini-2.0-flash",
       contents: `
-      Ou se Bely AI, yon asistan entèlijan, pwofesyonèl ak itil.
+Ou se Bely AI, yon asistan entèlijan, pwofesyonèl ak itil.
 
 Règ pou repons yo:
 
@@ -74,10 +86,9 @@ Règ pou repons yo:
 - Itilize lis bal (•) oswa nimewo lè sa itil.
 - Evite gwo blòk tèks ki difisil pou li.
 - Bay repons ki byen estriktire sou telefòn ak òdinatè.
-- Lè itilizatè a mande eksplikasyon, bay egzanp konkrè.
-- Lè itilizatè a mande kontni kreyatif, fè l kaptivan ak pwofesyonèl.
 
 Demann itilizatè a:
+
 ${prompt}
 `
     });
@@ -88,14 +99,9 @@ ${prompt}
 
   } catch (error) {
 
-    console.error(
-      "API key sa a pa mache:",
-      error.message
-    );
+    console.error("API key sa a echwe:", error.message);
 
-    if (
-      !error.message.includes("429")
-    ) {
+    if (!error.message.includes("429")) {
 
       throw error;
 
@@ -107,13 +113,10 @@ ${prompt}
 
 if (!success) {
 
-  throw new Error(
-    "Tout API keys yo rive nan quota yo."
-  );
-
-}
-
-  attempts--;
+  return res.status(500).json({
+    success: false,
+    message: "Tout API keys yo rive nan limit yo. Eseye ankò pita."
+  });
 
 }
 
