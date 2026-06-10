@@ -6,7 +6,12 @@ const path = require("path");
 const { GoogleGenAI } = require("@google/genai");
 
 const apiKeys = [
+
+  process.env.GEMINI_API_KEY_1,
+  process.env.GEMINI_API_KEY_2,
+  process.env.GEMINI_API_KEY_3,
   process.env.GEMINI_API_KEY_4
+
 ].filter(Boolean);
 
 console.log(
