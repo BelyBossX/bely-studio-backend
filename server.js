@@ -11,6 +11,18 @@ const apiKeys = [
   process.env.GEMINI_API_KEY_3
 ].filter(Boolean);
 
+console.log(
+  "API keys chaje:",
+  apiKeys.length
+);
+
+apiKeys.forEach((key, index) => {
+  console.log(
+    `Key ${index + 1}:`,
+    key.substring(0, 12)
+  );
+});
+
 const app = express();
 
 app.use(cors());
