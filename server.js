@@ -3,31 +3,10 @@ const cors = require("cors");
 const { exec } = require("child_process");
 const path = require("path");
 
-const groq = new Groq({
-  apiKey: process.env.GROQ_API_KEY,
-});
-
 const Groq = require("groq-sdk");
 
-const apiKeys = [
-
-  process.env.GEMINI_API_KEY_1,
-  process.env.GEMINI_API_KEY_2,
-  process.env.GEMINI_API_KEY_3,
-  process.env.GEMINI_API_KEY_4
-
-].filter(Boolean);
-
-console.log(
-  "API keys chaje:",
-  apiKeys.length
-);
-
-apiKeys.forEach((key, index) => {
-  console.log(
-    `Key ${index + 1}:`,
-    key.substring(0, 12)
-  );
+const groq = new Groq({
+  apiKey: process.env.GROQ_API_KEY,
 });
 
 const app = express();
@@ -47,45 +26,72 @@ app.get("/", (req, res) => {
 
 app.post("/ask-ai", async (req, res) => {
 
-    try {
-
-        console.log("Prompt resevwa:");
-        console.log(req.body);
-
-        console.log("BACKEND VERSION: GEMINI 2.0");
-
-        const { prompt } = req.body;
-
-let response;
-let success = false;
-
-for (const key of apiKeys) {
-
   try {
 
-    console.log("N ap itilize yon nouvo API key...");
+    const { prompt } = req.body;
+
+    console.log("Prompt resevwa:");
+    console.log(prompt);
 
     const completion =
-  await groq.chat.completions.create({
+      await groq.chat.completions.create({
 
-    model: "llama-3.3-70b-versatile",
+        model: "llama-3.3-70b-versatile",
 
-    messages: [
+        messages: [
 
-      {
-        role: "system",
-        content:
-          "Ou se Bely AI, yon asistan entèlijan ak pwofesyonèl."
-      },
+          {
+            role: "system",
 
-      {
-        role: "user",
-        content: prompt
-      }
+            content: `
+Ou se Bely AI.
 
-    ]
+- Reponn nan menm lang itilizatè a itilize.
+- Bay repons klè ak pwofesyonèl.
+- Itilize paragraf byen separe.
+- Itilize lis lè sa nesesè.
+- Evite gwo blòk tèks.
+`
+          },
 
-  });
+          {
+            role: "user",
+            content: prompt
+          }
+
+        ],
+
+        temperature: 0.7
+
+      });
+
+    const answer =
+      completion.choices[0].message.content;
+
+    res.json({
+
+      success: true,
+
+      answer
+
+    });
+
+  } catch (error) {
+
+    console.error("ERÈ GROQ:");
+    console.error(error);
+
+    res.status(500).json({
+
+      success: false,
+
+      message: error.message
+
+    });
+
+  }
+
+});
 
 const answer =
   completion.choices[0].message.content;
