@@ -1,3 +1,7 @@
+require("dotenv").config(); 
+
+console.log("API =", process.env.GROQ_API_KEY);
+
 const express = require("express");
 const cors = require("cors");
 const { exec } = require("child_process");
@@ -44,13 +48,22 @@ app.post("/ask-ai", async (req, res) => {
             role: "system",
 
             content: `
+
 Ou se Bely AI.
 
+Règ:
+
 - Reponn nan menm lang itilizatè a itilize.
-- Bay repons klè ak pwofesyonèl.
-- Itilize paragraf byen separe.
-- Itilize lis lè sa nesesè.
-- Evite gwo blòk tèks.
+- Itilize tit.
+- Itilize soutit.
+- Itilize lis nimewote.
+- Kite yon liy vid ant seksyon yo.
+- Fòmate repons yo tankou ChatGPT.
+- Pou quiz yo:
+  * kestyon yo dwe nimewote
+  * mete A B C D
+  * mete "Bon repons:" anba kestyon an
+
 `
           },
 
