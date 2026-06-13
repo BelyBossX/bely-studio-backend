@@ -13,6 +13,8 @@ const groq = new Groq({
   apiKey: process.env.GROQ_API_KEY,
 });
 
+const fs = require("fs");
+
 const app = express();
 
 app.use(cors());
@@ -184,6 +186,12 @@ console.log(
 );
 
     const ffmpegPath = "ffmpeg";
+
+const outputDir = path.join(__dirname, "output");
+
+if (!fs.existsSync(outputDir)) {
+  fs.mkdirSync(outputDir, { recursive: true });
+}
 
     const mp3Path =
       path.join(__dirname, "output", "audio.mp3");
