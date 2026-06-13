@@ -125,14 +125,12 @@ app.post("/generate", (req, res) => {
 
     const piperPath = path.join(
   __dirname,
-  "..",
   "piper",
-  "piper.exe"
+  "piper"
 );
 
     const modelPath = path.join(
   __dirname,
-  "..",
   "piper",
   "voices",
   "fr_FR-siwis-medium.onnx"
@@ -143,6 +141,14 @@ app.post("/generate", (req, res) => {
 
     const command =
       `echo "${text}" | "${piperPath}" --model "${modelPath}" --output_file "${outputPath}"`;
+   
+   exec(`chmod +x "${piperPath}"`, (chmodError) => {
+
+  if (chmodError) {
+    console.error("CHMOD ERROR:", chmodError);
+  }
+
+});   
 
    exec(command, (error) => {
 
@@ -157,14 +163,13 @@ app.post("/generate", (req, res) => {
 
     }
 
-    const ffmpegPath =
-      "C:\\ffmpeg\\ffmpeg-8.1.1-essentials_build\\bin\\ffmpeg.exe";
+    const ffmpegPath = "ffmpeg";
 
     const mp3Path =
       path.join(__dirname, "output", "audio.mp3");
 
     const convertCommand =
-      `"${ffmpegPath}" -y -i "${outputPath}" "${mp3Path}"`;
+`${ffmpegPath} -y -i "${outputPath}" "${mp3Path}"`;
 
     exec(convertCommand, (ffmpegError) => {
 
