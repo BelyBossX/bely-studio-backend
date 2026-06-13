@@ -6,14 +6,13 @@ const express = require("express");
 const cors = require("cors");
 const { exec } = require("child_process");
 const path = require("path");
+const fs = require("fs");
 
 const Groq = require("groq-sdk");
 
 const groq = new Groq({
   apiKey: process.env.GROQ_API_KEY,
 });
-
-const fs = require("fs");
 
 const app = express();
 
@@ -138,8 +137,6 @@ app.post("/generate", (req, res) => {
   "fr_FR-siwis-medium.onnx"
 );
 
-const fs = require("fs");
-
 const outputDir = path.join(__dirname, "output");
 
 if (!fs.existsSync(outputDir)) {
@@ -153,8 +150,6 @@ console.log(
 
     const outputPath =
       path.join(__dirname, "output", "audio.wav");
-
-      const fs = require("fs");
 
 console.log("OUTPUT PATH =", outputPath);
 
