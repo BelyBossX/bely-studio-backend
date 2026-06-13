@@ -138,6 +138,19 @@ app.post("/generate", (req, res) => {
   "fr_FR-siwis-medium.onnx"
 );
 
+const fs = require("fs");
+
+const outputDir = path.join(__dirname, "output");
+
+if (!fs.existsSync(outputDir)) {
+  fs.mkdirSync(outputDir, { recursive: true });
+}
+
+console.log(
+  "OUTPUT DIR CREATED =",
+  fs.existsSync(outputDir)
+);
+
     const outputPath =
       path.join(__dirname, "output", "audio.wav");
 
