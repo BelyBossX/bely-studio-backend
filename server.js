@@ -150,7 +150,13 @@ app.post("/generate", (req, res) => {
 
 });   
 
-   exec(command, (error) => {
+   exec(command, (error, stdout, stderr) => {
+
+    console.log("PIPER STDOUT:");
+    console.log(stdout);
+
+    console.log("PIPER STDERR:");
+    console.log(stderr);
 
     if (error) {
 
