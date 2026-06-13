@@ -139,6 +139,15 @@ app.post("/generate", (req, res) => {
     const outputPath =
       path.join(__dirname, "output", "audio.wav");
 
+      const fs = require("fs");
+
+console.log("OUTPUT PATH =", outputPath);
+
+console.log(
+  "OUTPUT FOLDER EXISTS =",
+  fs.existsSync(path.join(__dirname, "output"))
+);
+
     const command =
       `echo "${text}" | "${piperPath}" --model "${modelPath}" --output_file "${outputPath}"`;
    
@@ -168,6 +177,11 @@ app.post("/generate", (req, res) => {
         });
 
     }
+
+    console.log(
+  "WAV EXISTS =",
+  fs.existsSync(outputPath)
+);
 
     const ffmpegPath = "ffmpeg";
 
