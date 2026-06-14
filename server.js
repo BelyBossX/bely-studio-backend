@@ -24,6 +24,50 @@ app.get("/test123", (req, res) => {
   res.send("BELY TEST OK");
 });
 
+app.get("/image-test", (req, res) => {
+
+  res.json({
+    success: true,
+    message: "Image route active"
+  });
+
+});
+
+app.post("/generate-image", async (req, res) => {
+
+  try {
+
+    const { prompt } = req.body;
+
+    const output = await replicate.run(
+      "black-forest-labs/flux-schnell",
+      {
+        input: {
+          prompt: prompt
+        }
+      }
+    );
+
+    res.json({
+      success: true,
+      image: output[0]
+    });
+
+  } catch (error) {
+
+    console.error(error);
+
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+
+  }
+
+});
+
+
+
 app.use(cors());
 app.use(express.json());
 
@@ -240,47 +284,7 @@ if (!fs.existsSync(outputDir)) {
 
 });
 
-app.post("/generate-image", async (req, res) => {
 
-  try {
-
-    const { prompt } = req.body;
-
-    const output = await replicate.run(
-      "black-forest-labs/flux-schnell",
-      {
-        input: {
-          prompt: prompt
-        }
-      }
-    );
-
-    res.json({
-      success: true,
-      image: output[0]
-    });
-
-  } catch (error) {
-
-    console.error(error);
-
-    res.status(500).json({
-      success: false,
-      message: error.message
-    });
-
-  }
-
-});
-
-app.get("/image-test", (req, res) => {
-
-  res.json({
-    success: true,
-    message: "Image route active"
-  });
-
-});
 
 app.get("/test123", (req, res) => {
 
