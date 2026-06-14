@@ -35,15 +35,25 @@ app.get("/image-test", (req, res) => {
 
 app.post("/generate-image", async (req, res) => {
 
+  console.log("BODY RESEVWA:");
+  console.log(req.body);
+
   try {
 
-    const { prompt } = req.body;
+    const prompt = req.body?.prompt;
+
+    if (!prompt) {
+      return res.status(400).json({
+        success: false,
+        message: "Prompt pa rive nan backend la"
+      });
+    }
 
     const output = await replicate.run(
       "black-forest-labs/flux-schnell",
       {
         input: {
-          prompt: prompt
+          prompt
         }
       }
     );
@@ -65,8 +75,6 @@ app.post("/generate-image", async (req, res) => {
   }
 
 });
-
-
 
 app.use(cors());
 app.use(express.json());
