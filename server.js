@@ -278,6 +278,12 @@ app.get("/image-test", (req, res) => {
 
 });
 
+app.get("/test123", (req, res) => {
+
+  res.send("BELY TEST OK");
+
+});
+
 app.get("/bely-version", (req, res) => {
 
   res.json({
