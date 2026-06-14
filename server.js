@@ -20,6 +20,11 @@ const replicate = new Replicate({
 
 const app = express();
 
+app.use(cors());
+app.use(express.json());
+
+app.use("/audio", express.static("output"));
+
 app.get("/test123", (req, res) => {
   res.send("BELY TEST OK");
 });
@@ -75,11 +80,6 @@ app.post("/generate-image", async (req, res) => {
   }
 
 });
-
-app.use(cors());
-app.use(express.json());
-
-app.use("/audio", express.static("output"));
 
 app.get("/", (req, res) => {
 
