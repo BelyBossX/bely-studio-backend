@@ -278,6 +278,14 @@ app.get("/image-test", (req, res) => {
 
 });
 
+app.get("/bely-version", (req, res) => {
+
+  res.json({
+    version: "IMAGE-ROUTE-V1"
+  });
+
+});
+
 app.listen(5000, () => {
 
     console.log(
