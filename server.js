@@ -7,11 +7,15 @@ const cors = require("cors");
 const { exec } = require("child_process");
 const path = require("path");
 const fs = require("fs");
-
+const Replicate = require("replicate");
 const Groq = require("groq-sdk");
 
 const groq = new Groq({
   apiKey: process.env.GROQ_API_KEY,
+});
+
+const replicate = new Replicate({
+  auth: process.env.REPLICATE_API_TOKEN,
 });
 
 const app = express();
@@ -229,6 +233,48 @@ if (!fs.existsSync(outputDir)) {
     });
 
 });
+
+});
+
+app.post("/generate-image", async (req, res) => {
+
+  try {
+
+    const { prompt } = req.body;
+
+    const output = await replicate.run(
+      "black-forest-labs/flux-schnell",
+      {
+        input: {
+          prompt: prompt
+        }
+      }
+    );
+
+    res.json({
+      success: true,
+      image: output[0]
+    });
+
+  } catch (error) {
+
+    console.error(error);
+
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+
+  }
+
+});
+
+app.get("/image-test", (req, res) => {
+
+  res.json({
+    success: true,
+    message: "Image route active"
+  });
 
 });
 
