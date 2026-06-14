@@ -20,6 +20,10 @@ const replicate = new Replicate({
 
 const app = express();
 
+app.get("/test123", (req, res) => {
+  res.send("BELY TEST OK");
+});
+
 app.use(cors());
 app.use(express.json());
 
