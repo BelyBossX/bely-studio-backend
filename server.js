@@ -1,7 +1,7 @@
 require("dotenv").config(); 
 
 console.log("API =", process.env.GROQ_API_KEY);
-
+console.log("VERSION IMAGE ROUTE ACTIVE");
 const express = require("express");
 const cors = require("cors");
 const { exec } = require("child_process");
